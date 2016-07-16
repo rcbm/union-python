@@ -2,7 +2,6 @@
 TODO:
 
 More models
- - Updating
  - Saving
  - Deleting
 
@@ -64,14 +63,18 @@ class UnionClient(object):
         self.response =      None
 
     @property
-    def _path_name(self):
+    def _model_path_name(self):
         if self.model:
-            class_name = self.model.__name__.lower()
+            if isinstance(self.model, type):
+                class_name = self.model.__name__.lower()
+            else:
+                class_name = self.model.__class__.__name__.lower()
+
             return '/%ss' % class_name
 
     @property
     def _url(self):
-        url = "%s://%s%s" % (self.protocol, self.host, self._path_name)
+        url = "%s://%s%s" % (self.protocol, self.host, self._model_path_name)
         if self.params:
             if 'id' in self.params.keys():
                 id_param = self.params.pop('id')
@@ -123,8 +126,9 @@ class UnionClient(object):
         self.params = params
         url = self._url
         headers = self._headers
+        action = action.lower()
 
-        if action is 'post':
+        if action is not 'get':
             headers = dict(headers, **{'Content-Type': 'application/json'})
 
         try:
