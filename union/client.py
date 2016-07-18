@@ -2,7 +2,6 @@
 TODO:
 
 More models
- - Saving
  - Deleting
 
 Testing:
@@ -47,47 +46,41 @@ class ValidationError(UnionError):
 #
 
 class UnionClient(object):
-    def __init__(self, model=None):
+    def __init__(self):
         self.content_type =  'application/json'
         self.api_key =       union.api_key
         self.host =          union.host
         self.api_version =   union.api_version
         self.api_namespace = union.api_namespace
         self.protocol =      union.protocol
-        self.model =         model
-        self.params =        None
-        self.response =      None
 
-    @property
-    def _model_path_name(self):
-        if self.model:
-            if isinstance(self.model, type):
-                class_name = self.model.__name__.lower()
-            else:
-                class_name = self.model.__class__.__name__.lower()
+    def _headers(self, action=None):
+        default = {'Accept': 'application/json',
+                   'Authorization': 'Token %s' % (self.api_key,)}
 
-            return '/%ss' % class_name
+        if action and action.lower() is not 'get':
+            return dict(default, **{'Content-Type': 'application/json'})
+        return default
 
-    @property
-    def _url(self):
-        url = "%s://%s%s" % (self.protocol, self.host, self._model_path_name)
-        if self.params:
-            if 'id' in self.params.keys():
-                id_param = self.params.pop('id')
+    def _model_path_name(self, model):
+        if isinstance(model, type):
+            class_name = model.__name__.lower()
+        else:
+            class_name = model.__class__.__name__.lower()
+        return '/%ss' % class_name
+
+    def _create_url(self, model, **params):
+        url = "%s://%s%s" % (self.protocol, self.host, self._model_path_name(model))
+        if params:
+            if 'id' in params.keys():
+                id_param = params.pop('id')
                 url += '/%s' % id_param
-            for k, v in self.params.iteritems():
+            for k, v in params.iteritems():
                 url += '&%s=%s' % (k, v)
-
         return url
 
-    @property
-    def _headers(self):
-        return {'Accept': 'application/json',
-                'Authorization': 'Token %s' % (self.api_key,)}
-
-    @property
-    def _is_valid(self):
-        return True if (200 <= self.response.status_code < 300) else False
+    def _is_valid(self, response):
+        return True if (200 <= response.status_code < 300) else False
 
     def _look_up_model_name(self, name_type, name):
         results = [x for x in union.MODEL_MAP if x[name_type] == name.lower()]
@@ -112,27 +105,21 @@ class UnionClient(object):
                 return [self._from_json({model: obj}) for obj in v]
             elif isinstance(v, dict) and not isinstance(v, union.BaseModel):
                 return model(**v)
-
             return json_data
 
-    def make_request(self, action, body=None, params=None, post_data=None):
+    def make_request(self, model, action, url_params={}, post_data=None):
         '''
         Fire request to API and validate, parse, and return the response
         '''
-        self.params = params
-        url = self._url
-        headers = self._headers
-        action = action.lower()
-
-        if action is not 'get':
-            headers = dict(headers, **{'Content-Type': 'application/json'})
+        url = self._create_url(model, **url_params)
+        headers = self._headers(action)
 
         try:
-            self.response = requests.request(action, url, headers=headers, data=post_data)
+            response = requests.request(action, url, headers=headers, data=post_data)
         except Exception as e:
             raise APIError("There was an error communicating with Union: %s" % e)
 
-        if not self._is_valid:
-            raise ValidationError("The Union response returned an error: %s" % self.response.content)
+        if not self._is_valid(response):
+            raise ValidationError("The Union response returned an error: %s" % response.content)
 
-        return self._parse_response(self.response)
+        return self._parse_response(response)

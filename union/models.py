@@ -29,29 +29,33 @@ class BaseModel(object):
         return json.dumps(self._to_dict, sort_keys=True, indent=4)
 
     @classmethod
+    def _new_api_client(cls):
+        return union.UnionClient()
+
+    @classmethod
     def all(cls):
         '''
         Returns multiple Union objects
         '''
-        client = union.UnionClient(cls)
-        return client.make_request('get')
+        client = cls._new_api_client()
+        return client.make_request(cls, 'get')
 
     @classmethod
     def get(cls, id):
         '''
         Look up one Union object
         '''
-        client = union.UnionClient(cls)
-        return client.make_request('get', params={'id': id})
+        client = cls._new_api_client()
+        return client.make_request(cls, 'get', url_params={'id': id})
 
     def save(self):
         '''
         Save an instance of a Union object
         '''
-        client = union.UnionClient(self)
+        client = self._new_api_client()
         params = None if not self.id else {'id': self.id}
-        action = 'patch' if self.id else 'post'
-        return client.make_request(action, params=params, post_data=self._to_json)
+        action = 'post' if not self.id else 'patch'
+        return client.make_request(self, action, url_params=params, post_data=self._to_json)
 
 
 #
