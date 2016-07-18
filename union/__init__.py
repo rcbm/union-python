@@ -7,8 +7,8 @@ protocol = "http"
 
 # Union Models
 from union.models import (
+    BaseModel,
     Customer,
-    BaseModel
 )
 
 # API Client

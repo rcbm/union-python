@@ -21,8 +21,7 @@ class BaseModel(object):
 
     @property
     def _to_dict(self):
-        return dict((k, v) for k, v in self.__dict__.items()
-                               if not k.startswith('_') and getattr(self, k) is not None)
+        return dict((k, v) for k, v in self.__dict__.items() if not k.startswith('_'))
 
     @property
     def _to_json(self):
@@ -53,9 +52,10 @@ class BaseModel(object):
         Save an instance of a Union object
         '''
         client = self._new_api_client()
-        params = None if not self.id else {'id': self.id}
-        action = 'post' if not self.id else 'patch'
-        return client.make_request(self, action, url_params=params, post_data=self._to_json)
+        params = {'id': self.id} if hasattr(self, 'id') else {}
+        action =  'patch' if hasattr(self, 'id') else 'post'
+        saved_model = client.make_request(self, action, url_params=params, post_data=self._to_json)
+        self.__init__(**saved_model._to_dict)
 
 
 #
