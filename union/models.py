@@ -6,11 +6,9 @@ import union
 #
 
 class BaseModel(object):
-    def __init__(self, attrs=None):
-        super(BaseModel, self).__init__()
-        if hasattr(attrs, 'iteritems'):
-            for k, v in attrs.iteritems():
-                self.__setattr__(k, v)
+    def __init__(self, **attrs):
+        for k, v in attrs.iteritems():
+            self.__setattr__(k, v)
 
     def __repr__(self):
         return unicode('< union.%s(%s) >' % (type(self).__name__, self))
@@ -36,8 +34,7 @@ class BaseModel(object):
         Returns multiple Union objects
         '''
         client = union.UnionClient(cls)
-        json_data = client.make_request('get')
-        return client.from_json(json_data)
+        return client.make_request('get')
 
     @classmethod
     def get(cls, id):
@@ -45,17 +42,16 @@ class BaseModel(object):
         Look up one Union object
         '''
         client = union.UnionClient(cls)
-        json_data = client.make_request('get', params={'id': id})
-        return client.from_json(json_data)
-
+        return client.make_request('get', params={'id': id})
 
     def save(self):
+        '''
+        Save an instance of a Union object
+        '''
         client = union.UnionClient(self)
-        params = {'id': self.id}
+        params = None if not self.id else {'id': self.id}
         action = 'patch' if self.id else 'post'
-
-        json_data = client.make_request(action, params=params, post_data=self._to_json)
-        return client.from_json(json_data)
+        return client.make_request(action, params=params, post_data=self._to_json)
 
 
 #

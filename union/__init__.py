@@ -13,3 +13,8 @@ from union.models import (
 
 # API Client
 from union.client import UnionClient
+
+# Union models
+MODEL_MAP = [
+        {'model': Customer, 'name': 'customer', 'plural': 'customers'},
+]

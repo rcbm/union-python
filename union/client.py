@@ -47,10 +47,6 @@ class ValidationError(UnionError):
 #
 
 class UnionClient(object):
-    MODEL_MAP = [
-            {'model': union.Customer, 'name': 'customer', 'plural': 'customers'},
-    ]
-
     def __init__(self, model=None):
         self.content_type =  'application/json'
         self.api_key =       union.api_key
@@ -94,7 +90,7 @@ class UnionClient(object):
         return True if (200 <= self.response.status_code < 300) else False
 
     def _look_up_model_name(self, name_type, name):
-        results = [x for x in self.MODEL_MAP if x[name_type] == name.lower()]
+        results = [x for x in union.MODEL_MAP if x[name_type] == name.lower()]
         if results:
             return results[0]['model']
 
@@ -105,17 +101,17 @@ class UnionClient(object):
         model = self._look_up_model_name('name', name)
         return model or self._look_up_model_name('plural', name)
 
-    def from_json(self, json_data):
-        '''
-        Converts json response to one or more Union objects
-        '''
+    def _parse_response(self, response):
+        return self._from_json(json.loads(response.content))
+
+    def _from_json(self, json_data):
         for k, v in json_data.iteritems():
             model = self._get_model_from_name(k)
 
             if isinstance(v, list):
-                return [self.from_json({model: obj}) for obj in v]
+                return [self._from_json({model: obj}) for obj in v]
             elif isinstance(v, dict) and not isinstance(v, union.BaseModel):
-                return model(v)
+                return model(**v)
 
             return json_data
 
@@ -139,4 +135,4 @@ class UnionClient(object):
         if not self._is_valid:
             raise ValidationError("The Union response returned an error: %s" % self.response.content)
 
-        return json.loads(self.response.content)
+        return self._parse_response(self.response)
