@@ -13,9 +13,11 @@ Readme
 Examples
 
 Update API Docs
+  - Model changes
   - New token auth
   - Ensure all params are accounted for
   - Add taxes
+  - Add payments
   - Remove Address if in docs
 '''
 
@@ -64,10 +66,10 @@ class UnionClient(object):
 
     def _model_path_name(self, model):
         if isinstance(model, type):
-            class_name = model.__name__.lower()
+            class_name = self._look_up_plural_from_model(model)
         else:
-            class_name = model.__class__.__name__.lower()
-        return '/%ss' % class_name
+            class_name = self._look_up_plural_from_model(model.__class__)
+        return '/%s' % class_name
 
     def _create_url(self, model, **params):
         url = "%s://%s%s" % (self.protocol, self.host, self._model_path_name(model))
@@ -81,6 +83,11 @@ class UnionClient(object):
 
     def _is_valid(self, response):
         return True if (200 <= response.status_code < 300) else False
+
+    def _look_up_plural_from_model(self, model):
+        results = [x for x in union.MODEL_MAP if x['model'] == model]
+        if results:
+            return results[0]['plural']
 
     def _look_up_model_name(self, name_type, name):
         results = [x for x in union.MODEL_MAP if x[name_type] == name.lower()]

@@ -65,17 +65,17 @@ class BaseModel(object):
 class Customer(BaseModel):
     pass
 
-# class Vendor(BaseModel):
-#     pass
+class Vendor(BaseModel):
+    pass
 
-# class Sale(BaseModel):
-#     pass
+class Sale(BaseModel):
+    pass
 
-# class SaleItem(BaseModel):
-#     pass
+class SaleItem(BaseModel):
+    pass
 
-# class Invoice(BaseModel):
-#     pass
+class CustomerInvoice(BaseModel):
+    pass
 
-# class Bill(BaseModel):
-#     pass
+class VendorInvoice(BaseModel):
+    pass
