@@ -1,4 +1,4 @@
-api_key = '0a3a9b8fbd1fc460104040eb548d941d'
+api_key = ''
 api_namespace = 'api'
 api_version = "v1"
 host = "api.unionbilling.com"
