@@ -1,2 +1,2 @@
-# Union Billing API - Python Bindings
-A Python library for accessing the Union Billing API
+# Union-Python
+A Python client library for using the Union Billing API
