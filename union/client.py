@@ -1,26 +1,3 @@
-'''
-TODO:
-
-More models
- - Deleting
-
-Testing:
- - Nested models
- - Client tests
- - Model actions
-
-Readme
-Examples
-
-Update API Docs
-  - Model changes
-  - New token auth
-  - Ensure all params are accounted for
-  - Add taxes
-  - Add payments
-  - Remove Address if in docs
-'''
-
 import json
 import requests
 import union
@@ -74,10 +51,10 @@ class UnionClient(object):
     def _create_url(self, model, **params):
         url = "%s://%s%s" % (self.protocol, self.host, self._model_path_name(model))
         if params:
-            if 'id' in params.keys():
+            if 'id' in list(params):
                 id_param = params.pop('id')
                 url += '/%s' % id_param
-            for k, v in params.iteritems():
+            for k, v in params.items():
                 url += '&%s=%s' % (k, v)
         return url
 
@@ -105,7 +82,7 @@ class UnionClient(object):
         return self._from_json(json.loads(response.content))
 
     def _from_json(self, json_data):
-        for k, v in json_data.iteritems():
+        for k, v in json_data.items():
             model = self._get_model_from_name(k)
 
             if isinstance(v, list):
@@ -116,7 +93,7 @@ class UnionClient(object):
 
     def make_request(self, model, action, url_params={}, post_data=None):
         '''
-        Fire request to API and validate, parse, and return the response
+        Send request to API then validate, parse, and return the response
         '''
         url = self._create_url(model, **url_params)
         headers = self._headers(action)

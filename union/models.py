@@ -59,7 +59,7 @@ class BaseModel(object):
 
 
 #
-# Union Object Models
+# Union Objects
 #
 
 class Customer(BaseModel):
