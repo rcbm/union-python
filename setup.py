@@ -10,7 +10,7 @@ setup(
     author='Union Inc.',
     author_email='hello@unionbilling.com',
     description='A Python library for accessing the Union Billing API.',
-    url='https://github.com/rcbm/union-python',
+    url='https://github.com/unionbilling/union-python',
     license='MIT',
     keywords='union billing api',
     packages=find_packages(),
