@@ -2,7 +2,7 @@ api_key = ''
 api_namespace = 'api'
 api_version = "v1"
 host = "api.unionbilling.com"
-protocol = "http"
+protocol = "https"
 
 # Union Models
 from union.models import (
