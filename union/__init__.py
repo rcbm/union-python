@@ -8,11 +8,16 @@ protocol = "https"
 from union.models import (
     BaseModel,
     Customer,
-    CustomerInvoice,
+    Invoice,
     Vendor,
-    VendorInvoice,
-    Sale,
-    SaleItem,
+    Bill,
+    Order,
+    Item,
+    Organization,
+    PaymentMethod,
+    Payments,
+    PurchaseOrder,
+    Tax
 )
 
 # API Client
@@ -21,9 +26,14 @@ from union.client import UnionClient
 # Union models
 MODEL_MAP = [
         {'model': Customer, 'name': 'customer', 'plural': 'customers'},
-        {'model': CustomerInvoice, 'name': 'customer_invoice', 'plural': 'customer_invoices'},
+        {'model': Invoice, 'name': 'invoice', 'plural': 'invoices'},
         {'model': Vendor, 'name': 'vendor', 'plural': 'vendors'},
-        {'model': VendorInvoice, 'name': 'vendor_invoice', 'plural': 'vendor_invoices'},
-        {'model': Sale, 'name': 'sale', 'plural': 'sales'},
-        {'model': SaleItem, 'name': 'sale_item', 'plural': 'sale_items'},
+        {'model': Bill, 'name': 'bill', 'plural': 'bills'},
+        {'model': Order, 'name': 'order', 'plural': 'sales'},
+        {'model': Item, 'name': 'item', 'plural': 'items'},
+        {'model': Organization, 'name': 'organization', 'plural': 'organizations'},
+        {'model': PaymentMethod, 'name': 'payment_method', 'plural': 'payment_methods'},
+        {'model': Payments, 'name': 'payments', 'plural': 'payments'},
+        {'model': PurchaseOrder, 'name': 'purchase_order', 'plural': 'purchase_order'},
+        {'model': Tax, 'name': 'tax', 'plural': 'tax'},
 ]

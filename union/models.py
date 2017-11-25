@@ -65,17 +65,32 @@ class BaseModel(object):
 class Customer(BaseModel):
     pass
 
+class Invoice(BaseModel):
+    pass
+
 class Vendor(BaseModel):
     pass
 
-class Sale(BaseModel):
+class Bill(BaseModel):
     pass
 
-class SaleItem(BaseModel):
+class Order(BaseModel):
     pass
 
-class CustomerInvoice(BaseModel):
+class Item(BaseModel):
     pass
 
-class VendorInvoice(BaseModel):
+class Organization(BaseModel):
+    pass
+
+class PaymentMethod(BaseModel):
+    pass
+
+class Payments(BaseModel):
+    pass
+
+class PurchaseOrder(BaseModel):
+    pass
+
+class Tax(BaseModel):
     pass
