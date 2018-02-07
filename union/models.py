@@ -57,6 +57,13 @@ class BaseModel(object):
         saved_model = client.make_request(self, action, url_params=params, post_data=self._to_json)
         self.__init__(**saved_model._to_dict)
 
+    @classmethod
+    def delete(cls, id):
+        '''
+        Destroy a Union object
+        '''
+        client = cls._new_api_client()
+        return client.make_request(cls, 'delete', url_params={'id': id})
 
 #
 # Union Objects

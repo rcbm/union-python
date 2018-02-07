@@ -29,11 +29,11 @@ MODEL_MAP = [
         {'model': Invoice, 'name': 'invoice', 'plural': 'invoices'},
         {'model': Vendor, 'name': 'vendor', 'plural': 'vendors'},
         {'model': Bill, 'name': 'bill', 'plural': 'bills'},
-        {'model': Order, 'name': 'order', 'plural': 'sales'},
+        {'model': Order, 'name': 'order', 'plural': 'orders'},
         {'model': Item, 'name': 'item', 'plural': 'items'},
         {'model': Organization, 'name': 'organization', 'plural': 'organizations'},
         {'model': PaymentMethod, 'name': 'payment_method', 'plural': 'payment_methods'},
         {'model': Payments, 'name': 'payments', 'plural': 'payments'},
         {'model': PurchaseOrder, 'name': 'purchase_order', 'plural': 'purchase_order'},
-        {'model': Tax, 'name': 'tax', 'plural': 'tax'},
+        {'model': Tax, 'name': 'tax', 'plural': 'taxes'},
 ]
