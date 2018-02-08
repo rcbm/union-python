@@ -34,6 +34,6 @@ MODEL_MAP = [
         {'model': Organization, 'name': 'organization', 'plural': 'organizations'},
         {'model': PaymentMethod, 'name': 'payment_method', 'plural': 'payment_methods'},
         {'model': Payments, 'name': 'payments', 'plural': 'payments'},
-        {'model': PurchaseOrder, 'name': 'purchase_order', 'plural': 'purchase_order'},
+        {'model': PurchaseOrder, 'name': 'purchase_order', 'plural': 'purchase_orders'},
         {'model': Tax, 'name': 'tax', 'plural': 'taxes'},
 ]

@@ -79,7 +79,8 @@ class UnionClient(object):
         return model or self._look_up_model_name('plural', name)
 
     def _parse_response(self, response):
-        return self._from_json(json.loads(response.content))
+        if response.content:
+            return self._from_json(json.loads(response.content))
 
     def _from_json(self, json_data):
         for k, v in json_data.items():
