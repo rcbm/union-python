@@ -28,8 +28,8 @@ class BaseModel(object):
         return json.dumps(self._to_dict, sort_keys=True, indent=4)
 
     @classmethod
-    def _new_api_client(cls):
-        return union.UnionClient()
+    def _new_api_client(cls, **kwargs):
+        return union.UnionClient(**kwargs)
 
     @classmethod
     def all(cls):
@@ -38,6 +38,16 @@ class BaseModel(object):
         '''
         client = cls._new_api_client()
         return client.make_request(cls, 'get')
+
+    @classmethod
+    def filter(cls, **items):
+        '''
+        Returns multiple Union objects with search params
+        '''
+        client = cls._new_api_client(subpath='/search')
+        items_dict = dict((k, v) for k, v in items.items())
+        json_data = json.dumps(items_dict, sort_keys=True, indent=4)
+        return client.make_request(cls, 'post', post_data=json_data)
 
     @classmethod
     def get(cls, id):
