@@ -25,13 +25,14 @@ class ValidationError(UnionError):
 #
 
 class UnionClient(object):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.content_type =  'application/json'
         self.api_key =       union.api_key
         self.host =          union.host
         self.api_version =   union.api_version
         self.api_namespace = union.api_namespace
         self.protocol =      union.protocol
+        self.subpath =       kwargs.get('subpath', '')
 
     def _headers(self, action=None):
         default = {'Accept': 'application/json',
@@ -50,6 +51,7 @@ class UnionClient(object):
 
     def _create_url(self, model, **params):
         url = "%s://%s%s" % (self.protocol, self.host, self._model_path_name(model))
+        url += self.subpath
         if params:
             if 'id' in list(params):
                 id_param = params.pop('id')
