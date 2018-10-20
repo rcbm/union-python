@@ -1,6 +1,7 @@
 import json
 import requests
 import union
+from six import text_type
 
 
 #
@@ -56,7 +57,7 @@ class UnionClient(object):
             if 'id' in list(params):
                 id_param = params.pop('id')
                 url += '/%s' % id_param
-            for k, v in params.items():
+            for k, v in list(params.items()):
                 url += '&%s=%s' % (k, v)
         return url
 
@@ -74,7 +75,7 @@ class UnionClient(object):
             return results[0]['model']
 
     def _get_model_from_name(self, name):
-        if not isinstance(name, unicode):
+        if not isinstance(name, text_type):
             return name
 
         model = self._look_up_model_name('name', name)
@@ -85,7 +86,7 @@ class UnionClient(object):
             return self._from_json(json.loads(response.content))
 
     def _from_json(self, json_data):
-        for k, v in json_data.items():
+        for k, v in list(json_data.items()):
             model = self._get_model_from_name(k)
 
             if isinstance(v, list):

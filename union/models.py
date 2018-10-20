@@ -1,5 +1,6 @@
 import json
 import union
+from six import text_type
 
 #
 # Abstract Base Model
@@ -7,11 +8,11 @@ import union
 
 class BaseModel(object):
     def __init__(self, **attrs):
-        for k, v in attrs.iteritems():
+        for k, v in list(attrs.items()):
             self.__setattr__(k, v)
 
     def __repr__(self):
-        return unicode('< union.%s(%s) >' % (type(self).__name__, self))
+        return text_type('< union.%s(%s) >' % (type(self).__name__, self))
 
     def __str__(self):
         return self._to_json
@@ -21,7 +22,7 @@ class BaseModel(object):
 
     @property
     def _to_dict(self):
-        return dict((k, v) for k, v in self.__dict__.items() if not k.startswith('_'))
+        return dict((k, v) for k, v in list(self.__dict__.items()) if not k.startswith('_'))
 
     @property
     def _to_json(self):
@@ -45,7 +46,7 @@ class BaseModel(object):
         Returns multiple Union objects with search params
         '''
         client = cls._new_api_client(subpath='/search')
-        items_dict = dict((k, v) for k, v in items.items())
+        items_dict = dict((k, v) for k, v in list(items.items()))
         json_data = json.dumps(items_dict, sort_keys=True, indent=4)
         return client.make_request(cls, 'post', post_data=json_data)
 
