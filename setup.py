@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-VERSION = (0, 1, 8)
+VERSION = (0, 1, 9)
 version = '.'.join(map(str, VERSION))
 
 setup(
@@ -17,7 +17,8 @@ setup(
 
     install_requires=[
         'setuptools',
-        'requests>=2.7.0',
+        'requests>=2.19.1',
+        'six',
     ],
 
     classifiers=[
@@ -30,6 +31,8 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 
 )
